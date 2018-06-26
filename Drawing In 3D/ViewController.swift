@@ -45,6 +45,31 @@ extension ViewController: ARSCNViewDelegate {
         let location = SCNVector3(transform.m41, transform.m42, transform.m43)
         let currentPosition = orientation + location
         print(currentPosition)
+
+        DispatchQueue.main.async {
+
+            if self.drawButton.isHighlighted {
+                let drawingNode = SCNNode(geometry: SCNSphere(radius: 0.02))
+                drawingNode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                drawingNode.position = currentPosition
+                self.sceneView.scene.rootNode.addChildNode(drawingNode)
+
+            } else {
+                //remove all old curser nodes
+                self.sceneView.scene.rootNode.enumerateChildNodes({ (node, _) in
+                    if node.name == "curserNode" {
+                        node.removeFromParentNode()
+                    }
+                })
+
+                //add a curser node at the current camera position
+                let curserNode = SCNNode(geometry: SCNSphere(radius: 0.01))
+                curserNode.name = "curserNode"
+                curserNode.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+                curserNode.position = currentPosition
+                self.sceneView.scene.rootNode.addChildNode(curserNode)
+            }
+        }
     }
 }
 
