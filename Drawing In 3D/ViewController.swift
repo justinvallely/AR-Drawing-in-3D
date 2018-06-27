@@ -34,6 +34,12 @@ class ViewController: UIViewController {
 
         sceneView.session.pause()
     }
+
+    @IBAction func clearButtonAction(_ sender: Any) {
+        self.sceneView.scene.rootNode.enumerateChildNodes({ (node, _) in
+            node.removeFromParentNode()
+        })
+    }
 }
 
 extension ViewController: ARSCNViewDelegate {
@@ -44,7 +50,6 @@ extension ViewController: ARSCNViewDelegate {
         let orientation = SCNVector3(-transform.m31, -transform.m32, -transform.m33)
         let location = SCNVector3(transform.m41, transform.m42, transform.m43)
         let currentPosition = orientation + location
-        print(currentPosition)
 
         DispatchQueue.main.async {
 
